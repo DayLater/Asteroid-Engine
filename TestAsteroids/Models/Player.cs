@@ -24,12 +24,11 @@ namespace AsteroidsEngine
             MainPoints[2] = new Vector(Position.X + 15, Position.Y + 25);
             MainPoints[3] = (MainPoints[0] + MainPoints[1]) * 0.5f;
             MainPoints[4] = (MainPoints[0] + MainPoints[2]) * 0.5f;
-            Laser.Update();
         }
 
         public bool TryActivateLaser()
         {
-            return Laser.Activate();
+            return Laser.TryActivate();
         }
 
         public override PointF[] GetCoordinates()

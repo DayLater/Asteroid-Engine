@@ -12,7 +12,6 @@ namespace AsteroidsEngine.Entities
         private int laserActiveTicks;
         private readonly int maxLaserTicks = 40;
 
-        private bool isLaserActive;
         private bool isReload = true;
 
         private int currentReloadTicks;
@@ -24,32 +23,27 @@ namespace AsteroidsEngine.Entities
         public Laser(Player player, int width, int height)
         {
             this.player = player;
-
-            var maxDistance = (int)System.Math.Sqrt(width * width + height *height);
-
+            GameModel.OnTick += Reload;
+            var maxDistance = (int)Math.Sqrt(width * width + height *height);
             for (int i = 0; i > -maxDistance; i -= 5)
                 pointsToBuildLaser.Add(new Vector(0, i));
         }
 
-        public bool Activate()
+        public bool TryActivate()
         {
-            if (!isReload)
-            {
-                isReload = true;
-                laserPoints = new Vector[pointsToBuildLaser.Count];
-                isLaserActive = true;
-                laserActiveTicks = 0;
-                UpdatePosition();
-                return true;
-            }
-
-            return false;
+            if (isReload) return false;
+            GameModel.OnTick += LaserOn;
+            isReload = true;
+            laserPoints = new Vector[pointsToBuildLaser.Count];
+            laserActiveTicks = 0;
+            return true;
         }
 
         private void UpdatePosition()
         {
-            for (int i = 0; i < laserPoints.Length; i++)
-                laserPoints[i] = (player.MainPoints[0] + pointsToBuildLaser[i])
+            var startLaserPosition = player.MainPoints[0].Rotate(player.Position, -player.Angle);
+            for (var i = 0; i < laserPoints.Length; i++)
+                laserPoints[i] = (startLaserPosition + pointsToBuildLaser[i])
                     .Rotate(player.Position, player.Angle);
         }
 
@@ -57,33 +51,27 @@ namespace AsteroidsEngine.Entities
         {
             UpdatePosition();
             laserActiveTicks++;
-            if (laserActiveTicks >= maxLaserTicks)
-            {
-                laserPoints = new Vector[0];
-                isLaserActive = false;
-            }
+            if (laserActiveTicks < maxLaserTicks) return;
+
+            laserPoints = new Vector[0];
+            GameModel.OnTick -= LaserOn;
+            GameModel.OnTick += Reload;
         }
 
-        private void Waiting()
+        private void Reload()
         {
             if (currentReloadTicks >= needToReloadTicks)
             {
                 currentReloadTicks = 0;
                 isReload = false;
                 OnReady?.Invoke();
+                GameModel.OnTick -= Reload;
             }
             else if (isReload)
             {
                 currentReloadTicks++;
-                OnReload?.Invoke(((double)currentReloadTicks / maxLaserTicks) * 8);
+                OnReload?.Invoke(((double)currentReloadTicks / needToReloadTicks) * 100);
             }
-        }
-
-        public void Update()
-        {
-            if (isLaserActive)
-                LaserOn();
-            else Waiting();
         }
 
         public Vector[] GetPoints()

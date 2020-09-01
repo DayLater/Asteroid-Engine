@@ -21,6 +21,8 @@ namespace AsteroidsEngine
         private int level;
         private int tickPassed;
         private int ticksForWave;
+        public static event Action OnTick; 
+
 
         public GameModel(int width, int height)
         {
@@ -81,7 +83,8 @@ namespace AsteroidsEngine
 
         public void Update()
         {
-            UpdateAllObjects();
+            UpdateAllObjects();            
+            OnTick?.Invoke();
             if (IsGameOver())
                 GameOver?.Invoke();
 
@@ -92,6 +95,7 @@ namespace AsteroidsEngine
             ticksForWave++;
             if (tickPassed % 500 == 0)
                 EnemySpawner.CreateUfo(Player);
+
 
             DestroyByLaser();
         }
