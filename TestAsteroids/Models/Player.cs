@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using AsteroidsEngine.Entities;
 
 namespace AsteroidsEngine
@@ -31,9 +32,9 @@ namespace AsteroidsEngine
             return Laser.TryActivate();
         }
 
-        public override PointF[] GetCoordinates()
+        public override IEnumerable<PointF> GetCoordinates()
         {
-            return new PointF[]
+            return new []
             {
                 MainPoints[0].ToPointF, 
                 MainPoints[1].ToPointF,

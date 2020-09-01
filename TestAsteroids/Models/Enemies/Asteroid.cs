@@ -19,6 +19,7 @@ namespace AsteroidsEngine.Entities
             MainPoints = new Vector[0];
             this.r = r;
             CreatePointToDraw();
+            UpdateCoordinates();
         }
 
         private void CreatePointToDraw()
@@ -29,21 +30,12 @@ namespace AsteroidsEngine.Entities
                 var point = new Vector(0, random.Next(-3, 3) + r).Rotate(Vector.Zero, i * 30) ;
                 pointToDraw[i] = point;
             }
-
-            UpdateCoordinates();
         }
 
         protected override void UpdateCoordinates()
         {
             Position += Speed;
             MainPoints = pointToDraw.Select(v => v + Position).ToArray();
-        }
-
-        public override PointF[] GetCoordinates()
-        {
-            return MainPoints
-                .Select(v => v.ToPointF)
-                .ToArray();
         }
 
         public override bool Contains(Vector vector)

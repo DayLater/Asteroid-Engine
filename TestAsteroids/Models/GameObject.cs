@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace AsteroidsEngine
@@ -18,11 +19,10 @@ namespace AsteroidsEngine
 
         internal void ChangePosition(Vector newPosition) => Position = newPosition;
 
-        public virtual PointF[] GetCoordinates()
+        public virtual IEnumerable<PointF> GetCoordinates()
         {
             return MainPoints
-                .Select(vector =>vector.ToPointF)
-                .ToArray();
+                .Select(vector => vector.ToPointF);
         }
 
         public void Turn(float angle)
