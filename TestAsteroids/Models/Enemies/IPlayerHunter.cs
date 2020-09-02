@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AsteroidsEngine;
+﻿using AsteroidsEngine.Entities;
 
 namespace TestAsteroids.Models.Enemies
 {
     public interface IPlayerHunter
     {
-        void GoToPlayer();
+        void GoToPlayer(Enemy enemy);
     }
 }

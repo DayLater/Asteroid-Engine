@@ -11,7 +11,7 @@ namespace AsteroidsEngine.Entities
 
         public Ufo(Vector position, Player player)
         {
-            hunter = new LineHunter(this, player);
+            hunter = new LineHunter(player);
             MainPoints = new Vector[0];
             Position = position;
             Body = new Ellipse(30, 15, Position);
@@ -24,7 +24,7 @@ namespace AsteroidsEngine.Entities
             Position += Speed;
             Body.Center = Position;
             Head.Center = Position + new Vector(0, -Body.Ry*0.7f);
-            hunter.GoToPlayer();
+            hunter.GoToPlayer(this);
         }
 
         public override bool Contains(Vector vector)
