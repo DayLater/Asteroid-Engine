@@ -21,8 +21,7 @@ namespace AsteroidsEngine
                 var y = rnd.Next(0, height);
                 var x = rnd.Next(0, 2) == 0 ? 1 : width - 1;
                 var position = new Vector(x, y);
-                var speed = Vector.GetRandomVector(-2, 2);
-                var asteroid = new Asteroid(position, speed, 30);
+                var asteroid = new Asteroid(position, 30);
                 folder.Add(asteroid);
             }
         }
@@ -31,9 +30,7 @@ namespace AsteroidsEngine
         {
             for (int i = 0; i < 3; i++)
             {
-                var speed = Vector.GetRandomVector(-3, 3);
-                var difference = Vector.GetRandomVector(-1, 1);
-                var child = new Asteroid(asteroid.Position + difference, speed, 15, true);
+                var child = new Asteroid(asteroid.Position, 15, true);
                 folder.Add(child);
             }
         }

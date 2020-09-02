@@ -13,13 +13,16 @@ namespace AsteroidsEngine
         public float Angle { get; protected set; }
         public Vector[] MainPoints { get; protected set; }
 
+        protected readonly Random random = new Random();
+
         protected void Rotate(float angle)
         {
             for (int i = 0; i < MainPoints.Length; i++)
                 MainPoints[i] = MainPoints[i].Rotate(Position, angle);
         }
 
-        internal void ChangePosition(Vector newPosition) => Position = newPosition;
+        internal void ChangePosition(Vector newPosition) 
+            => Position = newPosition;
 
         public virtual IEnumerable<PointF> GetCoordinates()
         {
@@ -41,6 +44,13 @@ namespace AsteroidsEngine
         {
             UpdateCoordinates();
             Rotate(Angle);
+        }
+
+        protected Vector GetRandomVector(int minValue, int maxValue)
+        {
+            var x = (float)(random.Next(minValue, maxValue));
+            var y = (float)(random.Next(minValue, maxValue));
+            return new Vector(x, y);
         }
 
         public override string ToString()

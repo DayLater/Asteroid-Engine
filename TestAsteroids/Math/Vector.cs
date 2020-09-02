@@ -5,7 +5,6 @@ namespace AsteroidsEngine
 {
     public class Vector
     {
-        private static readonly Random random = new Random();
         public float X { get; }
         public float Y { get; }
 
@@ -13,13 +12,6 @@ namespace AsteroidsEngine
         {
             X = x;
             Y = y;
-        }
-
-        public static Vector GetRandomVector(int minValue, int maxValue)
-        {
-            var x = (float)(random.Next(minValue, maxValue));
-            var y = (float)(random.Next(minValue, maxValue));
-            return new Vector(x, y);
         }
 
         public static Vector operator+(Vector vector, Vector other)

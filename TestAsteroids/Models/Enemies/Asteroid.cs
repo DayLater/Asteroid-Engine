@@ -11,11 +11,13 @@ namespace AsteroidsEngine.Entities
         private Vector[] pointToDraw;
 
 
-        public Asteroid(Vector position, Vector speed, float r, bool isChild = false)
+        public Asteroid(Vector position, float r, bool isChild = false)
         {
-            Position = position;
-            Speed = speed;
             IsChild = isChild;
+
+            Speed = isChild? GetRandomVector(-3, 3) : GetRandomVector(-2,2);
+            Position = isChild? position + GetRandomVector(-1, 1): position;
+
             MainPoints = new Vector[0];
             this.r = r;
             CreatePointToDraw();
