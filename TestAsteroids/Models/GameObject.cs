@@ -13,7 +13,7 @@ namespace AsteroidsEngine
         public float Angle { get; protected set; }
         public Vector[] MainPoints { get; protected set; }
 
-        protected readonly Random random = new Random();
+        protected static readonly Random random = new Random();
 
         protected void Rotate(float angle)
         {
