@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TestAsteroids.Models.Enemies;
 
 namespace AsteroidsEngine.Entities
 {
@@ -19,10 +16,11 @@ namespace AsteroidsEngine.Entities
 
         public void CreateUfo(Player player, int width, int height)
         {
+            var lineHunter = new LineHunter(player);
             var y = random.Next(0, height);
             var x = random.Next(0, 2) == 0 ? 1 : width;
             var position = new Vector(x, y);
-            var ufo = new Ufo(position, player);
+            var ufo = new Ufo(position, lineHunter);
             enemyFolder.Add(ufo);
         }
     }

@@ -9,9 +9,9 @@ namespace AsteroidsEngine.Entities
         public Ellipse Head { get;  }
         public override int Value { get; } = 100;
 
-        public Ufo(Vector position, Player player)
+        public Ufo(Vector position, IPlayerHunter hunter)
         {
-            hunter = new LineHunter(player);
+            this.hunter = hunter;
             MainPoints = new Vector[0];
             Position = position;
             Body = new Ellipse(30, 15, Position);
