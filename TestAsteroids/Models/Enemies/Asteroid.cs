@@ -15,8 +15,8 @@ namespace AsteroidsEngine.Entities
         {
             IsChild = isChild;
 
-            Speed = isChild? GetRandomVector(-3, 3) : GetRandomVector(-2,2);
-            Position = isChild? position + GetRandomVector(-1, 1): position;
+            Speed = isChild? GetRandomNotZeroVector(-3, 3) : GetRandomNotZeroVector(-2,2);
+            Position = isChild? position + GetRandomNotZeroVector(-1, 1): position;
 
             this.r = r;
             CreatePointToDraw();

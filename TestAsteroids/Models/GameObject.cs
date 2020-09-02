@@ -46,10 +46,16 @@ namespace AsteroidsEngine
             Rotate(Angle);
         }
 
-        protected Vector GetRandomVector(int minValue, int maxValue)
+        protected Vector GetRandomNotZeroVector(int minValue, int maxValue)
         {
-            var x = (float)(random.Next(minValue, maxValue));
-            var y = (float)(random.Next(minValue, maxValue));
+            int x = 0;
+            int y = 0;
+            while (x == 0 && y == 0)
+            {
+                x = (random.Next(minValue, maxValue));
+                y = (random.Next(minValue, maxValue));
+            }
+
             return new Vector(x, y);
         }
 

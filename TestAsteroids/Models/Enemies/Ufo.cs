@@ -16,7 +16,7 @@ namespace AsteroidsEngine.Entities
             Position = position;
             Body = new Ellipse(30, 15, Position);
             Head = new Ellipse(15, 15, Position + new Vector(0, -Body.Ry * 0.7f));
-            Speed = GetRandomVector(-2, 2);
+            Speed = GetRandomNotZeroVector(-2, 2);
         }
 
         protected override void UpdateCoordinates()
