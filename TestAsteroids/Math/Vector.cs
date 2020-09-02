@@ -27,9 +27,9 @@ namespace AsteroidsEngine
             return new Vector(vector.X + other.X, vector.Y + other.Y);
         }
 
-        public static Vector operator -(Vector first, Vector second)
+        public static Vector operator -(Vector vector, Vector other)
         {
-            return new Vector(first.X - second.X, first.Y - second.Y);
+            return new Vector(vector.X - other.X, vector.Y - other.Y);
         }
 
         public static Vector operator *(Vector vector, float factor)
@@ -65,7 +65,7 @@ namespace AsteroidsEngine
 
         public override string ToString()
         {
-            return string.Format("X = {0}, Y = {1}", X, Y);
+            return $"X = {X}, Y = {Y}";
         }
     }
 }

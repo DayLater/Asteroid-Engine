@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 
 namespace AsteroidsEngine
 {
     public abstract class GameObject
     {
         public Vector Position { get; protected set; }
-        protected Vector Speed { get;  set; }
+        public Vector Speed { get;  set; }
         public float Angle { get; protected set; }
         public Vector[] MainPoints { get; protected set; }
 
