@@ -18,10 +18,11 @@ namespace AsteroidsEngine.Entities
             Speed = isChild? GetRandomVector(-3, 3) : GetRandomVector(-2,2);
             Position = isChild? position + GetRandomVector(-1, 1): position;
 
-            MainPoints = new Vector[0];
             this.r = r;
             CreatePointToDraw();
-            UpdateCoordinates();
+            MainPoints = pointToDraw
+                .Select(v => v + Position)
+                .ToArray();
         }
 
         private void CreatePointToDraw()

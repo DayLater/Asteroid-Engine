@@ -51,6 +51,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Enemies\AsteroidHunter.cs" />
     <Compile Include="Models\Enemies\Enemy.cs" />
     <Compile Include="Models\Enemies\IPlayerHunter.cs" />
     <Compile Include="Models\Enemies\LineHunter.cs" />

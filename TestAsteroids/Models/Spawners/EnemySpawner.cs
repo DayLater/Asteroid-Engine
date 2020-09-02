@@ -24,10 +24,12 @@ namespace AsteroidsEngine.Entities.Spawners
             ufoSpawner = new UfoSpawner(enemyFolder);
         }
 
-        public void CreateAsteroidWave(int level)
+        public void CreateAsteroidWave(int level, Player player)
         {
             asteroidsSpawner.CreateBigAsteroids(level, width, height);
+            asteroidsSpawner.CreateHunterAsteroid(width, height, player);
         }
+
 
         public void CreateChildAsteroids(Asteroid asteroid)
         {

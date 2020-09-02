@@ -39,7 +39,7 @@ namespace AsteroidsEngine
             level = 5;
             Score = 0;
             OnEnemyDeath?.Invoke();
-            EnemySpawner.CreateAsteroidWave(level);
+            EnemySpawner.CreateAsteroidWave(level, Player);
         }
 
         private bool IsOutOfMap(GameObject gameObject)
@@ -104,7 +104,7 @@ namespace AsteroidsEngine
         {
             level++;
             ticksForWave = 0;
-            EnemySpawner.CreateAsteroidWave(level);
+            EnemySpawner.CreateAsteroidWave(level, Player);
         }
 
         private void UpdateBullets()
