@@ -42,11 +42,6 @@ namespace AsteroidsEngine
             };
         }
 
-        public Bullet Shoot()
-        {
-            return new Bullet(MainPoints[0], Angle);
-        }
-
         public void SpeedUp()
         {
             Vector acceleration = new Vector(0, -0.5f);

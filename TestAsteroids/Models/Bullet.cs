@@ -6,9 +6,8 @@
         {
             Position = position;
             Angle = alpha;
-            Speed = new Vector(0, -15);
-            Speed = Speed.Rotate(Vector.Zero, alpha);
             MainPoints = new Vector[2];
+            Speed = Vector.Zero;
             UpdateCoordinates();
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AsteroidsEngine.Entities;
 using AsteroidsEngine.Entities.Spawners;
+using TestAsteroids.Models.Spawners;
 
 namespace AsteroidsEngine
 {
@@ -10,7 +11,7 @@ namespace AsteroidsEngine
     {
         public EnemySpawner EnemySpawner { get; private set; }
         public Player Player { get; private set; }
-        public List<Bullet> Bullets { get; private set; }
+        public BulletsFolder Bullets { get; private set; }
 
         public event Action GameOver;
         public event Action OnEnemyDeath; 
@@ -35,7 +36,7 @@ namespace AsteroidsEngine
         {
             EnemySpawner = new EnemySpawner(width, height);
             Player = new Player(width, height);
-            Bullets = new List<Bullet>();
+            Bullets = new BulletsFolder(width, height);
             level = 5;
             Score = 0;
             OnEnemyDeath?.Invoke();
@@ -68,7 +69,7 @@ namespace AsteroidsEngine
                 yield return enemy;
         }
 
-        public void MakeShoot() => Bullets.Add(Player.Shoot());
+        public void MakeShoot() => Bullets.MakeShoot(Player.Angle, Player.Position);
 
         private void UpdateAllObjects()
         {
@@ -112,18 +113,14 @@ namespace AsteroidsEngine
             int i = 0;
             while (i < Bullets.Count)
             {
-                var bullet = Bullets[i];
+                var bullet = Bullets.GetNextActiveBullet();
+                if (bullet == null) return;
                 bullet.Update();
                 var isoOut = IsOutOfMap(bullet);
-                foreach (var point in bullet.MainPoints)
-                {
-                    var isDestroyed = DestroyIfHit(point);
-                    if (isoOut || isDestroyed)
-                    {
-                        Bullets.Remove(bullet);
-                        break;
-                    }
-                } 
+
+                if (bullet.MainPoints.Select(DestroyIfHit).Any(isDestroyed => isoOut || isDestroyed)) 
+                    Bullets.DeactivateBullet(bullet);
+                else Bullets.ReturnActiveBullet(bullet);
                 i++;
             }
         }
