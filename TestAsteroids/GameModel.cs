@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AsteroidsEngine.Entities;
 using AsteroidsEngine.Entities.Spawners;
 using TestAsteroids.Models.Spawners;
 
@@ -9,8 +10,8 @@ namespace AsteroidsEngine
     public class GameModel
     {
         public EnemySpawner EnemySpawner { get; private set; }
+        public BulletsFolder BulletsFolder { get; private set; }
         public Player Player { get; private set; }
-        public BulletsFolder Bullets { get; private set; }
 
         public event Action GameOver;
         public event Action OnEnemyDeath; 
@@ -35,7 +36,7 @@ namespace AsteroidsEngine
         {
             EnemySpawner = new EnemySpawner(width, height);
             Player = new Player(width, height);
-            Bullets = new BulletsFolder(width, height);
+            BulletsFolder = new BulletsFolder();
             level = 5;
             Score = 0;
             OnEnemyDeath?.Invoke();
@@ -61,24 +62,30 @@ namespace AsteroidsEngine
                 gameObject.ChangePosition(new Vector(gameObject.Position.X, height - 2));
         }
 
-        private IEnumerable<GameObject> UpdatedObjects()
+        public IEnumerable<GameObject> AllGameObjects()
         {
             yield return Player;
             foreach (var enemy in EnemySpawner)
                 yield return enemy;
+            foreach (var bullet in BulletsFolder)
+                yield return bullet;
         }
 
-        public void MakeShoot() => Bullets.MakeShoot(Player.Angle, Player.Position);
+        public void MakeShoot() => BulletsFolder.MakeShoot(Player.Angle, Player.Position);
 
         private void UpdateAllObjects()
         {
-            UpdateBullets();
-            foreach (var gameObject in UpdatedObjects())
+            foreach (var gameObject in AllGameObjects())
             {
                 gameObject.Update();
-                if (IsOutOfMap(gameObject))
+                var isOut = IsOutOfMap(gameObject);
+                if (gameObject is Bullet bullet && bullet.MainPoints.Select(DestroyIfHit).Any(isDestroyed => isOut || isDestroyed))
+                    BulletsFolder.AddBulletToDelete(bullet);
+                else if (isOut) 
                     ReturnToMap(gameObject);
             }
+
+            BulletsFolder.DeleteNonActiveBullets();
         }
 
         public void Update()
@@ -105,23 +112,6 @@ namespace AsteroidsEngine
             level++;
             ticksForWave = 0;
             EnemySpawner.CreateAsteroidWave(level, Player);
-        }
-
-        private void UpdateBullets()
-        {
-            int i = 0;
-            while (i < Bullets.Count)
-            {
-                var bullet = Bullets.GetNextActiveBullet();
-                if (bullet == null) return;
-                bullet.Update();
-                var isoOut = IsOutOfMap(bullet);
-
-                if (bullet.MainPoints.Select(DestroyIfHit).Any(isDestroyed => isoOut || isDestroyed)) 
-                    Bullets.DeactivateBullet(bullet);
-                else Bullets.ReturnActiveBullet(bullet);
-                i++;
-            }
         }
 
         private void DestroyByLaser()

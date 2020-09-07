@@ -1,13 +1,15 @@
-﻿namespace AsteroidsEngine.Entities
+﻿using System;
+
+namespace AsteroidsEngine.Entities
 {
     public class Bullet : GameObject
     {
-        public Bullet(Vector position, float alpha) 
+        public Bullet(Vector position, float angle) 
         {
             Position = position;
-            Angle = alpha;
+            Angle = angle;
             MainPoints = new Vector[2];
-            Speed = Vector.Zero;
+            Speed = new Vector(0, -15).Rotate(Vector.Zero, angle);
             UpdateCoordinates();
         }
 

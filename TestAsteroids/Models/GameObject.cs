@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
 
 namespace AsteroidsEngine
 {
@@ -14,6 +13,14 @@ namespace AsteroidsEngine
         public Vector[] MainPoints { get; protected set; }
 
         protected static readonly Random random = new Random();
+        private static int nextId;
+        private readonly int id;
+
+        protected GameObject()
+        {
+            id = nextId;
+            nextId++;
+        }
 
         protected void Rotate(float angle)
         {
@@ -59,9 +66,16 @@ namespace AsteroidsEngine
             return new Vector(x, y);
         }
 
-        public override string ToString()
+        public override int GetHashCode()
         {
-            return Position.ToString();
+            return id.GetHashCode();
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null) return false;
+            return ReferenceEquals(this, obj);
         }
     }
 }
