@@ -55,6 +55,34 @@ namespace AsteroidsEngine
             return new Vector(x, y);
         }
 
+
+        private bool FloatEquals(float a, float b)
+        {
+            return Math.Abs(a - b) < 1e-6;
+        }
+
+        public bool Equals(Vector other)
+        {
+            if (other is null) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return FloatEquals(X, other.X) && FloatEquals(Y, other.Y);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return GetType() == obj.GetType() && Equals((Vector) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (X.GetHashCode() * 397) ^ Y.GetHashCode();
+            }
+        }
+
         public override string ToString()
         {
             return $"X = {X}, Y = {Y}";
