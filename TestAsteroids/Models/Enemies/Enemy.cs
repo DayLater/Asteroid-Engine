@@ -9,9 +9,9 @@ namespace AsteroidsEngine.Entities
         public abstract bool Contains(Vector vector);
         public bool IsCollision(GameObject gameObject)
         {
-            foreach (var point in gameObject.MainPoints)
+            foreach (var vector in gameObject.MainVectors)
             {
-                if (Contains(point))
+                if (Contains(vector))
                     return true;
             }
 

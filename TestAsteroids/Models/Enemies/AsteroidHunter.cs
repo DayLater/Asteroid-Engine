@@ -13,9 +13,9 @@ namespace TestAsteroids.Models.Enemies
             this.hunter = hunter;
         }
 
-        protected override void UpdateCoordinates()
+        public override void Update()
         {
-            base.UpdateCoordinates();
+            base.Update();
             hunter.GoToPlayer(this);
         }
     }

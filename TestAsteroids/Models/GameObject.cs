@@ -10,7 +10,7 @@ namespace AsteroidsEngine
         public Vector Position { get; protected set; }
         public Vector Speed { get;  set; }
         public float Angle { get; protected set; }
-        public Vector[] MainPoints { get; protected set; }
+        public virtual IEnumerable<Vector> MainVectors { get; protected set; }
 
         protected static readonly Random random = new Random();
         private static int nextId;
@@ -22,18 +22,12 @@ namespace AsteroidsEngine
             nextId++;
         }
 
-        protected void Rotate(float angle)
-        {
-            for (int i = 0; i < MainPoints.Length; i++)
-                MainPoints[i] = MainPoints[i].Rotate(Position, angle);
-        }
-
         internal void ChangePosition(Vector newPosition) 
             => Position = newPosition;
 
         public virtual IEnumerable<PointF> GetCoordinates()
         {
-            return MainPoints
+            return MainVectors
                 .Select(vector => vector.ToPointF);
         }
 
@@ -42,15 +36,9 @@ namespace AsteroidsEngine
             Angle += angle;
         }
 
-        protected virtual void UpdateCoordinates()
+        public virtual void Update()
         {
             Position += Speed;
-        }
-
-        public void Update()
-        {
-            UpdateCoordinates();
-            Rotate(Angle);
         }
 
         protected Vector GetRandomNotZeroVector(int minValue, int maxValue)
@@ -70,7 +58,6 @@ namespace AsteroidsEngine
         {
             return id.GetHashCode();
         }
-
 
         public override bool Equals(object obj)
         {

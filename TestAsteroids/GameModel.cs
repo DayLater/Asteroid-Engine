@@ -79,7 +79,7 @@ namespace AsteroidsEngine
             {
                 gameObject.Update();
                 var isOut = IsOutOfMap(gameObject);
-                if (gameObject is Bullet bullet && bullet.MainPoints.Select(DestroyIfHit).Any(isDestroyed => isOut || isDestroyed))
+                if (gameObject is Bullet bullet && bullet.MainVectors.Select(DestroyIfHit).Any(isDestroyed => isOut || isDestroyed))
                     BulletsFolder.AddBulletToDelete(bullet);
                 else if (isOut) 
                     ReturnToMap(gameObject);

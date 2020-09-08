@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace AsteroidsEngine.Entities
@@ -8,8 +9,16 @@ namespace AsteroidsEngine.Entities
         private readonly float r;
         public bool IsChild { get; }
         public override int Value => IsChild ? 150 : 100;
-        private Vector[] pointToDraw;
 
+        private Vector[] vectorsToDraw;
+        public override IEnumerable<Vector> MainVectors
+        {
+            get 
+            { 
+                return vectorsToDraw.Select(vector => (vector + Position)
+                    .Rotate(Position, Angle));
+            }
+        }
 
         public Asteroid(Vector position, float r, bool isChild = false)
         {
@@ -20,25 +29,16 @@ namespace AsteroidsEngine.Entities
 
             this.r = r;
             CreatePointToDraw();
-            MainPoints = pointToDraw
-                .Select(v => v + Position)
-                .ToArray();
         }
 
         private void CreatePointToDraw()
         {
-            pointToDraw = new Vector[12];
+            vectorsToDraw = new Vector[12];
             for (int i = 0; i < 12; i++)
             {
                 var point = new Vector(0, random.Next(-3, 3) + r).Rotate(Vector.Zero, i * 30) ;
-                pointToDraw[i] = point;
+                vectorsToDraw[i] = point;
             }
-        }
-
-        protected override void UpdateCoordinates()
-        {
-            Position += Speed;
-            MainPoints = pointToDraw.Select(v => v + Position).ToArray();
         }
 
         public override bool Contains(Vector vector)

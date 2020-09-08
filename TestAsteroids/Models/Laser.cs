@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AsteroidsEngine.Entities
 {
@@ -41,7 +42,7 @@ namespace AsteroidsEngine.Entities
 
         private void UpdatePosition()
         {
-            var startLaserPosition = player.MainPoints[0].Rotate(player.Position, -player.Angle);
+            var startLaserPosition = player.MainVectors.FirstOrDefault()?.Rotate(player.Position, -player.Angle);
             for (var i = 0; i < laserPoints.Length; i++)
                 laserPoints[i] = (startLaserPosition + pointsToBuildLaser[i])
                     .Rotate(player.Position, player.Angle);

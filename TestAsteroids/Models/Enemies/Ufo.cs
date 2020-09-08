@@ -12,14 +12,13 @@ namespace AsteroidsEngine.Entities
         public Ufo(Vector position, IPlayerHunter hunter)
         {
             this.hunter = hunter;
-            MainPoints = new Vector[0];
             Position = position;
             Body = new Ellipse(30, 15, Position);
             Head = new Ellipse(15, 15, Position + new Vector(0, -Body.Ry * 0.7f));
             Speed = GetRandomNotZeroVector(-2, 2);
         }
 
-        protected override void UpdateCoordinates()
+        public override void Update()
         {
             Position += Speed;
             Body.Center = Position;

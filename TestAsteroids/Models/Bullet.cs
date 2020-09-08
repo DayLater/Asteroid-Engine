@@ -1,23 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AsteroidsEngine.Entities
 {
     public class Bullet : GameObject
     {
+        public override IEnumerable<Vector> MainVectors 
+        {
+            get
+            {
+                yield return (Position + new Vector(0, -5)).Rotate(Position, Angle);
+                yield return (Position + new Vector(0, 5)).Rotate(Position, Angle);
+            }
+        }
+
         public Bullet(Vector position, float angle) 
         {
             Position = position;
             Angle = angle;
-            MainPoints = new Vector[2];
             Speed = new Vector(0, -15).Rotate(Vector.Zero, angle);
-            UpdateCoordinates();
-        }
-
-        protected override void UpdateCoordinates()
-        {
-            Position += Speed;
-            MainPoints[0] = Position + new Vector(0, -5);
-            MainPoints[1] = Position + new Vector(0, 5);
         }
     }
 }

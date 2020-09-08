@@ -10,21 +10,30 @@ namespace AsteroidsEngine
         public Player(int width, int height)
         {
             Position = new Vector(width / 2, height / 2);
-            MainPoints = new Vector[5];
             Speed = Vector.Zero;
             Laser = new Laser(this, width, height);
-            UpdateCoordinates();
         }
 
-        protected override void UpdateCoordinates()
+        public override void Update()
         {
             Speed *= .98f;
             Position += Speed;
-            MainPoints[0] = new Vector(Position.X, Position.Y - 25);
-            MainPoints[1] = new Vector(Position.X - 15, Position.Y + 25);
-            MainPoints[2] = new Vector(Position.X + 15, Position.Y + 25);
-            MainPoints[3] = (MainPoints[0] + MainPoints[1]) * 0.5f;
-            MainPoints[4] = (MainPoints[0] + MainPoints[2]) * 0.5f;
+        }
+
+        public override IEnumerable<Vector> MainVectors 
+        {
+            get
+            {
+                var vector1 = new Vector(Position.X, Position.Y - 25);
+                var vector2 = new Vector(Position.X - 15, Position.Y + 25);
+                var vector3 = new Vector(Position.X + 15, Position.Y + 25);
+                var vector4 = (vector1 + vector2) * 0.5f;
+                var vector5 = (vector1 + vector3) * 0.5f;
+                var vectors = new HashSet<Vector>(5) {vector1, vector2, vector3, vector4, vector5};
+
+                foreach (var vector in vectors)
+                    yield return vector.Rotate(Position, Angle);
+            }
         }
 
         public bool TryActivateLaser()
@@ -34,12 +43,13 @@ namespace AsteroidsEngine
 
         public override IEnumerable<PointF> GetCoordinates()
         {
-            return new []
+            int count = 0;
+            foreach (var vector in MainVectors)
             {
-                MainPoints[0].ToPointF, 
-                MainPoints[1].ToPointF,
-                MainPoints[2].ToPointF
-            };
+                yield return vector.ToPointF;
+                count++;
+                if (count == 3) yield break;
+            }
         }
 
         public void SpeedUp()
