@@ -23,10 +23,7 @@ namespace TestAsteroids.Models.Spawners
             bullets.Add(bullet);
         }
 
-        public void AddBulletToDelete(Bullet bullet)
-        {
-            bulletsToDelete.Add(bullet);
-        }
+        public void AddBulletToDelete(Bullet bullet) => bulletsToDelete.Add(bullet);
 
         public void DeleteNonActiveBullets()
         {
@@ -35,8 +32,6 @@ namespace TestAsteroids.Models.Spawners
                 bullets.Remove(bulletToDelete);
             bulletsToDelete = new HashSet<Bullet>(8);
         }
-
-        public int Count => bullets.Count;
 
         public IEnumerator<Bullet> GetEnumerator()
         {

@@ -22,14 +22,9 @@ namespace AsteroidsEngine
             nextId++;
         }
 
-        internal void ChangePosition(Vector newPosition) 
-            => Position = newPosition;
+        internal void ChangePosition(Vector newPosition) => Position = newPosition;
 
-        public virtual IEnumerable<PointF> GetCoordinates()
-        {
-            return MainVectors
-                .Select(vector => vector.ToPointF);
-        }
+        public virtual IEnumerable<PointF> GetCoordinates() => MainVectors.Select(vector => vector.ToPointF);
 
         public void Turn(float angle)
         {
@@ -54,10 +49,7 @@ namespace AsteroidsEngine
             return new Vector(x, y);
         }
 
-        public override int GetHashCode()
-        {
-            return id.GetHashCode();
-        }
+        public override int GetHashCode() => id;
 
         public override bool Equals(object obj)
         {

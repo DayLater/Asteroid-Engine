@@ -40,7 +40,6 @@ namespace AsteroidsEngine.Entities
             return true;
         }
 
-
         private async void ActivateAsync(int seconds)
         {
             canActivate = false;
@@ -54,11 +53,10 @@ namespace AsteroidsEngine.Entities
         {
             for (var i = 0; i < 100; i++)
             {
-                if (breakReload) break;
+                if (breakReload) return;
                 await Task.Delay(seconds * 10);
                 OnReload?.Invoke(i);
             }
-            if (breakReload) return;
             canActivate = true;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using System.Linq;
 using TestAsteroids.Models.Enemies;
 
@@ -33,10 +34,8 @@ namespace AsteroidsEngine.Entities
         {
             vectorsToDraw = new Vector[12];
             for (var i = 0; i < 12; i++)
-            {
-                var vector = new Vector(0, random.Next(-3, 3) + r).Rotate(Vector.Zero, i * 30) ;
-                vectorsToDraw[i] = vector;
-            }
+                vectorsToDraw[i] = new Vector(0, random.Next(-3, 3) + r)
+                    .Rotate(Vector.Zero, i * 30);
         }
 
         public override bool Contains(Vector vector)
