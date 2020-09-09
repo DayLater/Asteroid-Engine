@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace AsteroidsEngine.Entities
 {
@@ -45,29 +43,19 @@ namespace AsteroidsEngine.Entities
 
         private async void ActivateAsync(int seconds)
         {
-            await Task.Run(() => Activate(seconds));
-        }
-
-        private void Activate(int seconds)
-        {
             canActivate = false;
             isActive = true;
-            Thread.Sleep(seconds * 1000);
+            await Task.Delay(seconds * 1000);
             isActive = false;
             ReloadAsync(ReloadTime);
         }
 
         private async void ReloadAsync(int seconds)
         {
-            await Task.Run(() => Reload(seconds));
-        }
-
-        private void Reload(int seconds)
-        {
             for (var i = 0; i < 100; i++)
             {
                 if (breakReload) break;
-                Thread.Sleep(seconds * 10);
+                await Task.Delay(seconds * 10);
                 OnReload?.Invoke(i);
             }
             if (breakReload) return;
@@ -82,6 +70,7 @@ namespace AsteroidsEngine.Entities
                 var startLaserPosition = player.MainVectors
                     .FirstOrDefault()?
                     .Rotate(player.Position, -player.Angle);
+
                 return vectorsToBuildLaser
                     .Select(v => (startLaserPosition + v).Rotate(player.Position, player.Angle));
             }
