@@ -13,7 +13,9 @@ namespace AsteroidsEngine
         public BulletsFolder BulletsFolder { get; private set; }
         public Player Player { get; private set; }
 
-        public event Action GameOver;
+        public static event Action GameStart; 
+        public static event Action GameOver;
+
         public event Action OnEnemyDeath; 
 
         private readonly int width;
@@ -22,24 +24,23 @@ namespace AsteroidsEngine
         private int level;
         private int tickPassed;
         private int ticksForWave;
-        public static event Action OnTick; 
+        public static event Action Tick;
 
 
         public GameModel(int width, int height)
         {
             this.width = width;
             this.height = height;
-            StartGame();
         }
 
-        public void StartGame()
+        public void Start()
         {
             EnemySpawner = new EnemySpawner(width, height);
             Player = new Player(width, height);
             BulletsFolder = new BulletsFolder();
             level = 5;
             Score = 0;
-            OnEnemyDeath?.Invoke();
+            GameStart?.Invoke();
             EnemySpawner.CreateAsteroidWave(level, Player);
         }
 
@@ -91,7 +92,7 @@ namespace AsteroidsEngine
         public void Update()
         {
             UpdateAllObjects();            
-            OnTick?.Invoke();
+            Tick?.Invoke();
             if (IsGameOver())
                 GameOver?.Invoke();
 
@@ -102,7 +103,6 @@ namespace AsteroidsEngine
             ticksForWave++;
             if (tickPassed % 500 == 0)
                 EnemySpawner.CreateUfo(Player);
-
 
             DestroyByLaser();
         }
@@ -116,9 +116,9 @@ namespace AsteroidsEngine
 
         private void DestroyByLaser()
         {
-            var laserPoints = Player.Laser.GetPoints();
-            foreach (var laserPoint in laserPoints)
-                DestroyIfHit(laserPoint);
+            var laserVectors = Player.Laser.Vectors;
+            foreach (var vector in laserVectors)
+                DestroyIfHit(vector);
         }
 
         private bool DestroyIfHit(Vector possibleHit)

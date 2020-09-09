@@ -1,84 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AsteroidsEngine.Entities
 {
     public class Laser
     {
-        private Vector[] laserPoints = new Vector[0];
-        private readonly List<Vector> pointsToBuildLaser = new List<Vector>();
+        private readonly List<Vector> vectorsToBuildLaser = new List<Vector>();
         private readonly Player player;
 
-        private int laserActiveTicks;
-        private readonly int maxLaserTicks = 40;
+        private bool isActive;
+        private bool canActivate;
+        private bool breakReload;
 
-        private bool isReload = true;
-
-        private int currentReloadTicks;
-        private readonly int needToReloadTicks = 500;
-
-        public static event Action OnReady;
         public static event Action<double> OnReload;
+        private const int ReloadTime = 10;
 
         public Laser(Player player, int width, int height)
         {
+            GameModel.GameOver += () => breakReload = true;
+            GameModel.GameStart += () => ReloadAsync(ReloadTime);
+
             this.player = player;
-            GameModel.OnTick += Reload;
-            var maxDistance = (int)Math.Sqrt(width * width + height *height);
-            for (int i = 0; i > -maxDistance; i -= 5)
-                pointsToBuildLaser.Add(new Vector(0, i));
+            CreateVectorsToBuildLaser(width, height);
+        }
+
+        private void CreateVectorsToBuildLaser(int width, int height)
+        {
+            var maxDistance = (int)Math.Sqrt(width * width + height * height);
+            for (var i = 0; i > -maxDistance; i -= 5)
+                vectorsToBuildLaser.Add(new Vector(0, i));
         }
 
         public bool TryActivate()
         {
-            if (isReload) return false;
-            GameModel.OnTick += LaserOn;
-            isReload = true;
-            laserPoints = new Vector[pointsToBuildLaser.Count];
-            laserActiveTicks = 0;
+            if (!canActivate) return false;
+            ActivateAsync(1);
             return true;
         }
 
-        private void UpdatePosition()
+
+        private async void ActivateAsync(int seconds)
         {
-            var startLaserPosition = player.MainVectors.FirstOrDefault()?.Rotate(player.Position, -player.Angle);
-            for (var i = 0; i < laserPoints.Length; i++)
-                laserPoints[i] = (startLaserPosition + pointsToBuildLaser[i])
-                    .Rotate(player.Position, player.Angle);
+            await Task.Run(() => Activate(seconds));
         }
 
-        private void LaserOn()
+        private void Activate(int seconds)
         {
-            UpdatePosition();
-            laserActiveTicks++;
-            if (laserActiveTicks < maxLaserTicks) return;
-
-            laserPoints = new Vector[0];
-            GameModel.OnTick -= LaserOn;
-            GameModel.OnTick += Reload;
+            canActivate = false;
+            isActive = true;
+            Thread.Sleep(seconds * 1000);
+            isActive = false;
+            ReloadAsync(ReloadTime);
         }
 
-        private void Reload()
+        private async void ReloadAsync(int seconds)
         {
-            if (currentReloadTicks >= needToReloadTicks)
+            await Task.Run(() => Reload(seconds));
+        }
+
+        private void Reload(int seconds)
+        {
+            for (var i = 0; i < 100; i++)
             {
-                currentReloadTicks = 0;
-                isReload = false;
-                OnReady?.Invoke();
-                GameModel.OnTick -= Reload;
+                if (breakReload) break;
+                Thread.Sleep(seconds * 10);
+                OnReload?.Invoke(i);
             }
-            else if (isReload)
-            {
-                currentReloadTicks++;
-                OnReload?.Invoke(((double)currentReloadTicks / needToReloadTicks) * 100);
-            }
+            if (breakReload) return;
+            canActivate = true;
         }
 
-        public Vector[] GetPoints()
+        public IEnumerable<Vector> Vectors
         {
-            return new List<Vector>(laserPoints)
-                .ToArray();
+            get
+            {
+                if (!isActive) return new Vector[0];
+                var startLaserPosition = player.MainVectors
+                    .FirstOrDefault()?
+                    .Rotate(player.Position, -player.Angle);
+                return vectorsToBuildLaser
+                    .Select(v => (startLaserPosition + v).Rotate(player.Position, player.Angle));
+            }
         }
     }
 }
