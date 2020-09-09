@@ -16,7 +16,7 @@ namespace AsteroidsEngine.Entities
 
         public void CreateUfo(Player player, int width, int height)
         {
-            var lineHunter = new LineHunter(player);
+            var lineHunter = new LineHunterBehavior(player);
             var y = random.Next(0, height);
             var x = random.Next(0, 2) == 0 ? 1 : width;
             var position = new Vector(x, y);

@@ -1,30 +1,21 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AsteroidsEngine;
 using AsteroidsEngine.Entities;
 
 namespace TestAsteroids.Models.Enemies
 {
-    public class LineHunter: IPlayerHunter
+    public class LineHunterBehavior: IBehavior
     {
         private readonly Random random = new Random();
         private readonly Player player;
         private int tickCount;
         private readonly int tickCountToGoToPlayer;
 
-        public LineHunter(Player player, int tickCountToGoToPlayer = 40)
+        public LineHunterBehavior(Player player, int tickCountToGoToPlayer = 40)
         { 
             this.player = player;
             this.tickCountToGoToPlayer = tickCountToGoToPlayer;
-        }
-
-        public void GoToPlayer(Enemy enemy)
-        {
-            tickCount++;
-            if (tickCount >= tickCountToGoToPlayer)
-            {
-                tickCount = 0;
-                ChangeSpeed(enemy);
-            }
         }
 
         private void ChangeSpeed(Enemy enemy)
@@ -48,6 +39,17 @@ namespace TestAsteroids.Models.Enemies
             }
 
             enemy.Speed = newSpeed;
+        }
+
+        public void Moving(Enemy enemy)
+        {
+            enemy.ChangePosition(enemy.Position + enemy.Speed);
+            tickCount++;
+            if (tickCount >= tickCountToGoToPlayer)
+            {
+                tickCount = 0;
+                ChangeSpeed(enemy);
+            }
         }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace TestAsteroids.Models.Enemies
 {
-    public interface IPlayerHunter
+    public interface IBehavior
     {
-        void GoToPlayer(Enemy enemy);
+        void Moving(Enemy enemy);
     }
 }

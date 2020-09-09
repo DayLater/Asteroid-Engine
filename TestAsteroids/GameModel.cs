@@ -15,17 +15,15 @@ namespace AsteroidsEngine
 
         public static event Action GameStart; 
         public static event Action GameOver;
-
         public event Action OnEnemyDeath; 
 
         private readonly int width;
         private readonly int height;
+
         public int Score { get; private set; }
         private int level;
         private int tickPassed;
         private int ticksForWave;
-        public static event Action Tick;
-
 
         public GameModel(int width, int height)
         {
@@ -41,7 +39,7 @@ namespace AsteroidsEngine
             level = 5;
             Score = 0;
             GameStart?.Invoke();
-            EnemySpawner.CreateAsteroidWave(level, Player);
+            EnemySpawner.CreateAsteroidWave(level);
         }
 
         private bool IsOutOfMap(GameObject gameObject)
@@ -91,8 +89,7 @@ namespace AsteroidsEngine
 
         public void Update()
         {
-            UpdateAllObjects();            
-            Tick?.Invoke();
+            UpdateAllObjects();
             if (IsGameOver())
                 GameOver?.Invoke();
 
@@ -111,7 +108,7 @@ namespace AsteroidsEngine
         {
             level++;
             ticksForWave = 0;
-            EnemySpawner.CreateAsteroidWave(level, Player);
+            EnemySpawner.CreateAsteroidWave(level);
         }
 
         private void DestroyByLaser()

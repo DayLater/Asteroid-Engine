@@ -17,22 +17,12 @@ namespace AsteroidsEngine
 
         public void CreateBigAsteroids(int level, int width, int height)
         {
+            var randomMovingBehavior = new DefaultMovingBehavior();
             for (int i = 0; i < level; i++)
             {
                 var position = CreateStartPositionVector(height, width);
-                var asteroid = new Asteroid(position, 30);
+                var asteroid = new Asteroid(position, 30, randomMovingBehavior);
                 folder.Add(asteroid);
-            }
-        }
-
-        public void CreateHunterAsteroid(int width, int height, Player player)
-        {
-            var lineHunter = new LineHunter(player);
-            for (int i = 0; i < 2; i++)
-            {
-                var position = CreateStartPositionVector(height, width);
-                var asteroidHunter = new AsteroidHunter(position, 30, lineHunter);
-                folder.Add(asteroidHunter);
             }
         }
 
@@ -45,9 +35,10 @@ namespace AsteroidsEngine
 
         public void CreateChildAsteroids(Asteroid asteroid)
         {
+            var randomMovingBehavior = new DefaultMovingBehavior();
             for (int i = 0; i < 3; i++)
             {
-                var child = new Asteroid(asteroid.Position, 15, true);
+                var child = new Asteroid(asteroid.Position, 15,randomMovingBehavior, true);
                 folder.Add(child);
             }
         }

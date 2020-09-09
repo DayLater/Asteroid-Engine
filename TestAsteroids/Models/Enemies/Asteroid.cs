@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using TestAsteroids.Models.Enemies;
 
 namespace AsteroidsEngine.Entities
 {
@@ -20,24 +21,22 @@ namespace AsteroidsEngine.Entities
             }
         }
 
-        public Asteroid(Vector position, float r, bool isChild = false)
+        public Asteroid(Vector position, float r, IBehavior behavior, bool isChild = false) : base(behavior)
         {
             IsChild = isChild;
-
             Speed = isChild? GetRandomNotZeroVector(-3, 3) : GetRandomNotZeroVector(-2,2);
             Position = isChild? position + GetRandomNotZeroVector(-1, 1): position;
-
             this.r = r;
-            CreatePointToDraw();
+            CreateVectorsToDraw();
         }
 
-        private void CreatePointToDraw()
+        private void CreateVectorsToDraw()
         {
             vectorsToDraw = new Vector[12];
-            for (int i = 0; i < 12; i++)
+            for (var i = 0; i < 12; i++)
             {
-                var point = new Vector(0, random.Next(-3, 3) + r).Rotate(Vector.Zero, i * 30) ;
-                vectorsToDraw[i] = point;
+                var vector = new Vector(0, random.Next(-3, 3) + r).Rotate(Vector.Zero, i * 30) ;
+                vectorsToDraw[i] = vector;
             }
         }
 

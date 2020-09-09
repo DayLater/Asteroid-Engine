@@ -51,10 +51,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Enemies\AsteroidHunter.cs" />
     <Compile Include="Models\Enemies\Enemy.cs" />
-    <Compile Include="Models\Enemies\IPlayerHunter.cs" />
-    <Compile Include="Models\Enemies\LineHunter.cs" />
+    <Compile Include="Models\Enemies\IBehavior.cs" />
+    <Compile Include="Models\Enemies\LineHunterBehavior.cs" />
+    <Compile Include="Models\Enemies\DefaultMovingBehavior.cs" />
     <Compile Include="Models\Laser.cs" />
     <Compile Include="Models\Spawners\BulletsFolder.cs" />
     <Compile Include="Models\Spawners\EnemySpawner.cs" />
