@@ -10,7 +10,7 @@ namespace AsteroidsEngine
         public Vector Position { get; protected set; }
         public Vector Speed { get;  set; }
         public float Angle { get; protected set; }
-        public abstract IEnumerable<Vector> MainVectors { get; }
+        public virtual IEnumerable<Vector> MainVectors => new Vector[0];
 
         protected static readonly Random random = new Random();
         private static int nextId;

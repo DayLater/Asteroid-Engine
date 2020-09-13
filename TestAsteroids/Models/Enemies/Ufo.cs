@@ -9,8 +9,6 @@ namespace AsteroidsEngine.Entities
         public Ellipse Head { get;  }
         public override int Value { get; } = 100;
 
-        public override IEnumerable<Vector> MainVectors => new Vector[0];
-
         public Ufo(Vector position, IBehavior behavior) : base(behavior)
         {
             Position = position;
