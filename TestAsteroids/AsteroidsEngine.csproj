@@ -52,9 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Enemies\Enemy.cs" />
-    <Compile Include="Models\Enemies\IBehavior.cs" />
-    <Compile Include="Models\Enemies\LineHunterBehavior.cs" />
-    <Compile Include="Models\Enemies\DefaultMovingBehavior.cs" />
+    <Compile Include="Models\Enemies\Behaviors\IBehavior.cs" />
+    <Compile Include="Models\Enemies\Behaviors\LineHunterBehavior.cs" />
+    <Compile Include="Models\Enemies\Behaviors\DefaultMovingBehavior.cs" />
     <Compile Include="Models\Laser.cs" />
     <Compile Include="Models\Spawners\BulletsFolder.cs" />
     <Compile Include="Models\Spawners\EnemySpawner.cs" />
